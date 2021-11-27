@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo/auth_cubit.dart';
 import 'package:todo/loading_view.dart';
 import 'package:todo/models/Todo.dart';
 import 'package:todo/todo_cubit.dart';
@@ -64,6 +65,11 @@ class _TodosViewState extends State<TodosView> {
 
   AppBar _navBar() {
     return AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.logout),
+        onPressed: () =>
+            BlocProvider.of<AuthCubit>(context).attemptAutoSignIn(),
+      ),
       title: const Text('Todos'),
     );
   }

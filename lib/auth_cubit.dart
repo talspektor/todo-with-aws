@@ -15,12 +15,13 @@ class AuthCubit extends Cubit<AuthState> {
         .catchError(_handleError);
   }
 
-  _handleError(Object e) {
+  _handleError(Object? e) {
     e is Exception ? emit(Unauthenticated()) : () {};
   }
 
   signOut() async {
     await _authRepository.signOut().catchError(_handleError);
+    emit(Unauthenticated());
   }
 
   attemptAutoSignIn() async {

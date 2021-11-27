@@ -2,39 +2,35 @@ import 'package:amplify_flutter/amplify.dart';
 
 class AuthRepository {
   Future<String> fetchUserIdFromAttributes() async {
-    final attributes = await Amplify.Auth.fetchUserAttributes();
+    final attributes =
+    await Amplify.Auth.fetchUserAttributes().catchError(_onError);
     final subAttribute =
-        attributes.firstWhere((element) => element.userAttributeKey == 'sub');
+    attributes.firstWhere((element) => element.userAttributeKey == 'sub');
     final userId = subAttribute.value;
     return userId;
   }
 
   Future<String> webSignIn() async {
-    try {
-      final result = await Amplify.Auth.signInWithWebUI();
-      if (result.isSignedIn) {
-        return await fetchUserIdFromAttributes();
-      } else {
-        throw Exception('could not sign in');
-      }
-    } catch (e) {
-      throw e;
-    }
+    final result = await Amplify.Auth.signInWithWebUI().catchError(_onError);
+    return result.isSignedIn
+        ? await fetchUserIdFromAttributes().catchError(_onError)
+        : throw Exception('could not sign in');
   }
 
   Future<void> signOut() async {
-    try {
-      await Amplify.Auth.signOut();
-    } catch (e) {
-      throw e;
+    await Amplify.Auth.signOut().catchError(_onError);
+  }
+
+  Future<String?> attemptAutoSignIn() async {
+    final session = await Amplify.Auth.fetchAuthSession().catchError(_onError);
+    if (session.isSignedIn) {
+      await fetchUserIdFromAttributes().catchError(_onError);
+    } else {
+      throw Exception('Not signed in');
     }
   }
 
-  Future<String> attemptAutoSignIn() async {
-    try {
-      return await fetchUserIdFromAttributes();
-    } catch (e) {
-      throw e;
-    }
+  _onError(Object e) {
+    throw e;
   }
 }

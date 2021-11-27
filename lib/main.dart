@@ -4,6 +4,7 @@ import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo/app_navigator.dart';
 import 'package:todo/auth_cubit.dart';
 import 'package:todo/todo_cubit.dart';
 import 'package:todo/todos_view.dart';
@@ -38,8 +39,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: BlocProvider(
-          create: (context) => AuthCubit(),
-          child: _amplifyConfigured ? const TodosView() : const LoadingView()),
+          create: (context) => AuthCubit()..attemptAutoSignIn(),
+          child:
+              _amplifyConfigured ? const AppNavigator() : const LoadingView()),
     );
   }
 
@@ -56,6 +58,7 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         _amplifyConfigured = true;
       });
+      // Amplify.DataStore.clear();
     } catch (e) {
       print(e);
     }

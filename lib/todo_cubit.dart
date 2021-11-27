@@ -23,15 +23,16 @@ class ListTodosFailure extends TodoState {
 
 class TodoCubit extends Cubit<dynamic> {
   final _todoRepository = TodoRepository();
+  final String userId;
 
-  TodoCubit() : super(LoadingTodos());
+  TodoCubit({required this.userId}) : super(LoadingTodos());
 
   getTodos() async {
     if (state is ListTodosSuccess == false) {
       emit(LoadingTodos());
     }
     await _todoRepository
-        .getTodos()
+        .getTodos(userId)
         .then(_handleSuccess)
         .catchError(_handleError);
   }
@@ -52,7 +53,7 @@ class TodoCubit extends Cubit<dynamic> {
   }
 
   crateTodo(String title) async {
-    await _todoRepository.crateTodo(title);
+    await _todoRepository.crateTodo(title, userId);
   }
 
   updateTodoIsComplete(Todo todo, bool isComplete) async {

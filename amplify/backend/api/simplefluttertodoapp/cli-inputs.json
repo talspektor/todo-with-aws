@@ -3,7 +3,7 @@
   "serviceConfiguration": {
     "apiName": "simplefluttertodoapp",
     "serviceName": "AppSync",
-    "gqlSchemaPath": "/tmp/amplify-59d3496e-eae6-4670-8e4e-b4e2f3bb2458/amplify/backend/api/simplefluttertodoapp/schema.graphql",
+    "gqlSchemaPath": "/tmp/amplify-d4842df7-8c93-4979-871e-9c752a81824c/amplify/backend/api/simplefluttertodoapp/schema.graphql",
     "defaultAuthType": {
       "mode": "API_KEY",
       "keyDescription": "api key description",
@@ -12,6 +12,10 @@
     "additionalAuthTypes": [
       {
         "mode": "AWS_IAM"
+      },
+      {
+        "mode": "AMAZON_COGNITO_USER_POOLS",
+        "cognitoUserPoolId": "authsimplefluttertodoappf48a7ba8"
       }
     ],
     "conflictResolution": {

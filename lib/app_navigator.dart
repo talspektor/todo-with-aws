@@ -19,7 +19,7 @@ class AppNavigator extends StatelessWidget {
             pages: [
               if (state is Unauthenticated)
                 const MaterialPage(child: AuthView()),
-              if (state is Authenticated) _todosViewPage(),
+              if (state is Authenticated) _todosViewPage(userId: state.userId),
               if (state is UnKnownAuthState)
                 const MaterialPage(child: LoadingView()),
             ],
@@ -28,9 +28,9 @@ class AppNavigator extends StatelessWidget {
         });
   }
 
-  MaterialPage _todosViewPage() => MaterialPage(
+  MaterialPage _todosViewPage({required String userId}) => MaterialPage(
         child: BlocProvider(
-          create: (context) => TodoCubit()
+          create: (context) => TodoCubit(userId: userId)
             ..getTodos()
             ..observeTodos(),
           child: const TodosView(),
