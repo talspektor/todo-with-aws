@@ -3,32 +3,24 @@ import 'package:amplify_flutter/amplify.dart';
 import 'models/Todo.dart';
 
 class TodoRepository {
-  Future<List<Todo>> getTodos() async {
-    try {
-      final todos = await Amplify.DataStore.query(Todo.classType);
-      return todos;
-    } catch (e) {
-      throw e;
-    }
-  }
+  Future<List<Todo>> getTodos() async =>
+      await Amplify.DataStore.query(Todo.classType).catchError(_onError);
 
   Future<void> crateTodo(String title) async {
     final newTodo = Todo(title: title, isCompleted: false);
-    try {
-      await Amplify.DataStore.save(newTodo);
-    } catch (e) {
-      throw e;
-    }
+    await Amplify.DataStore.save(newTodo).catchError(_onError);
   }
 
   Future<void> updateTodoIsComplete(Todo todo, bool isComplete) async {
     final updated = todo.copyWith(isCompleted: isComplete);
-    try {
-      await Amplify.DataStore.save(updated);
-    } catch (e) {
-      throw e;
-    }
+    await Amplify.DataStore.save(updated).catchError(_onError);
   }
 
+  Stream observedTodos() {
+    return Amplify.DataStore.observe(Todo.classType);
+  }
 
+  _onError(Object e) {
+    throw e;
+  }
 }

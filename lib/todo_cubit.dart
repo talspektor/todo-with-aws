@@ -46,13 +46,16 @@ class TodoCubit extends Cubit<dynamic> {
     }
   }
 
+  observeTodos() {
+    final todosStream = _todoRepository.observedTodos();
+    todosStream.listen((_) => getTodos());
+  }
+
   crateTodo(String title) async {
     await _todoRepository.crateTodo(title);
-    getTodos();
   }
 
   updateTodoIsComplete(Todo todo, bool isComplete) async {
     await _todoRepository.updateTodoIsComplete(todo, isComplete);
-    getTodos();
   }
 }
